@@ -1,11 +1,18 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 // cookieParser not bundled with express anymore
 app.use(cookieParser());
+
+// setting express to read cookie from subdomain (share cookie)
+app.use(session({
+    secret : 'awerlkuiawerlkui',
+    cookie: { domain:'localhost'}
+}));
 
 /* TODO : read laravel cookie and use logged in data as user. 
  * so that user doesnt need logged in again and i dont have to use API to check logged using node js
@@ -17,7 +24,8 @@ app.get('/', function (req, res) {
     //res.send('<h1>Salam dunia</h1>');
 //    res.cookie('username', 'miaw', {maxAge: 60*60*1000});
         
-//    console.log(req.cookies);
+    console.log(req.cookies);
+    console.log(req.signedCookies);
 //    console.log(req.cookies.username);
     res.sendFile(__dirname + '/index.html');
 });
