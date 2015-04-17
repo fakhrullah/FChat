@@ -11,7 +11,7 @@ app.use(cookieParser());
 // setting express to read cookie from subdomain (share cookie)
 app.use(session({
     secret : 'awerlkuiawerlkui',
-    cookie: { domain:'localhost'}
+    cookie: { domain:'.ilmuadalahkuasa.com'}
 }));
 
 /* TODO : read laravel cookie and use logged in data as user. 
