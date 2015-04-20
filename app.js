@@ -4,6 +4,7 @@ var session = require('express-session');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var config = require('./config.js');
 
 // cookieParser not bundled with express anymore
 app.use(cookieParser());
@@ -11,8 +12,12 @@ app.use(cookieParser());
 // setting express to read cookie from subdomain (share cookie)
 app.use(session({
     secret : 'awerlkuiawerlkui',
-    cookie: { domain:'.ilmuadalahkuasa.com'}
+    cookie: { domain:'.ilmuadalahkuasa.com'} // localhost for local development
 }));
+
+// for fast socket io
+io.set('browser client minification', true);  // send minified client
+io.set('browser client etag', true);          // apply etag caching logic based on version number
 
 /* TODO : read laravel cookie and use logged in data as user. 
  * so that user doesnt need logged in again and i dont have to use API to check logged using node js
@@ -27,6 +32,7 @@ app.get('/', function (req, res) {
     console.log(req.cookies);
     console.log(req.signedCookies);
 //    console.log(req.cookies.username);
+    console.log(config.domain);
     res.sendFile(__dirname + '/index.html');
 });
 
