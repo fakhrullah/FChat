@@ -28,6 +28,7 @@ io.set('browser client etag', true);          // apply etag caching logic based 
 */
 // http://stackoverflow.com/questions/22658222/sharing-laravel-4-session-with-nodejs-express
 
+console.log("config.domain : " + config.domain);
 
 app.get('/', function (req, res) {
     //res.send('<h1>Salam dunia</h1>');
@@ -36,7 +37,6 @@ app.get('/', function (req, res) {
     console.log(req.cookies);
     console.log(req.signedCookies);
 //    console.log(req.cookies.username);
-    console.log(config.domain);
     res.sendFile(__dirname + '/index.html');
 });
 
