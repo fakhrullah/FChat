@@ -5,6 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var config = require('./config.js');
+var path = require('path');
 
 // cookieParser not bundled with express anymore
 app.use(cookieParser());
@@ -14,6 +15,9 @@ app.use(session({
     secret : 'awerlkuiawerlkui',
     cookie: { domain:'.ilmuadalahkuasa.com'} // localhost for local development
 }));
+
+// setup to use public sources
+app.use(express.static(path.join(__dirname, 'public'))); //This is the place for your static stuff
 
 // for fast socket io
 io.set('browser client minification', true);  // send minified client

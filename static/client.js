@@ -6,7 +6,7 @@ $(function () {
         return false;
     });
     socket.on('new_connection', function (username, users) {
-        $('#messages').append('<li>' + username + ' masuk</li>');
+        $('#messages').append('<li class="new_user_enter">' + username + ' masuk</li>');
     });
     socket.on('users', function (users) {
         $('#users').text(users);
