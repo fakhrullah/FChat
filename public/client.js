@@ -1,18 +1,18 @@
 // this is client.js
 $(function () {
                 
-                // TODO save username in cookie for next session
-//                document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC"; 
-                
-                //send message function
-                var sendMsg = function(){
-                    if( $('#m').val().trim() === '') return '';
-                    socket.emit('chat_message', $('#m').val());
-                    $('#m').val('');
-                    $('#m').height(36);
-                    autoscrollMessages();
-                    return false;
-                };
+    // TODO save username in cookie for next session
+   	// document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC"; 
+    
+    //send message function
+    var sendMsg = function(){
+        if( $('#m').val().trim() === '') return '';
+        socket.emit('chat_message', $('#m').val());
+        $('#m').val('');
+        $('#m').height(36);
+        autoscrollMessages();
+        return false;
+    };
                 
     var socket = io();
     
@@ -24,11 +24,13 @@ $(function () {
     // new user enter
     socket.on('new_connection', function (username) {
         $('#messages').append('<li class="user_enter">' + username + ' masuk</li>');
+        showMsg();
     });
     
     //user left
     socket.on('user_left', function (username) {
         $('#messages').append('<li class="user_left">' + username + ' keluar</li>');
+        showMsg();
     });
     
     // users count
@@ -41,6 +43,7 @@ $(function () {
         var username = '<span class="username">'+ data.user + '</span>';
         var userMsg = '<span class="user_message">' + data.msg + '</span>';
         $('#messages').append('<li>'+username + ' : ' + userMsg + '</li>');
+        showMsg();
     });
     
     // receive user action
@@ -48,6 +51,7 @@ $(function () {
         $('#messages').append(
                 $('<li class="'+data.action+'">').text(data.msg)
                 );
+        showMsg();
     });
     
     // update online users
@@ -96,5 +100,12 @@ $(function () {
             window.scrollTo(0,m.offsetHeight);
         },300);
     };
+
+    var showMsg = function(){
+    	setTimeout(function(){
+    		var lastShowedMsg = $('.show_msg').length + 1;
+    		$("#messages li:nth-child("+lastShowedMsg+")").addClass('show_msg');
+    	}, 50);    	
+    }
 
 });

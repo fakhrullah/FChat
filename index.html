@@ -3,56 +3,7 @@
     <head>
         <title>F&S Chat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            html,body, #body-wrapper{height:100%;}
-            #body-wrapper{
-                position: relative;
-            }
-            #top-bar{
-                
-            }
-            #online{
-                position: fixed;
-                top: 0;right: 0;
-                padding: 5px;
-                background-color: #fff;
-            }
-            .transition-active{
-                transition: right ease-in 500ms;
-            }
-            #online.my-close{right: -99px;}
-            #messages{
-                padding-bottom: 46px;
-            }
-            #messageForm{
-                width: 100%;
-                display: table-cell;    
-                position: fixed;
-                bottom: 0px;
-                left: 0px;
-                background-color: cornflowerblue;
-                padding: 5px;
-            }
-            #messageForm textarea{
-                width: 100%;
-            }
-            #messageForm button{
-                background-color: cornflowerblue;
-                border-color: cornflowerblue;
-            }
-            #messages li{
-                padding: 1px 5px;
-                font-family: Ubuntu, Helvetica, Verdana, Roboto, sans-serif;
-            }
-            .change_name{
-                color:orange;
-                font-size: 80%;
-            }
-            .user_enter, .user_left{
-                color:cornflowerblue;
-                font-size: 80%;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css"/>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
         <script src="/socket.io/socket.io.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
