@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .form
+    .login.hide#loginForm
+      input#username(placeholder='Insert Your Username')
+      button.btn#sendLogin LOGIN!
+    .post.hide#postForm
+      textarea#msg
+      button.btn#sendMsg POST!      
+
+  .messages#messages
+
+    //- +msg("田中","なんだって良い")(class="black")
+    //- +msg('Anda', 'makan nasi goreng sungguh sedap')(class="blue")
+
+  mixin msg(name, msg)
+    .msg
+      .user
+        .avatar&attributes(attributes)
+          .initial= name.split("")[0]
+        .name=　name
+
+      .text&attributes(attributes)= msg

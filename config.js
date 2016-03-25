@@ -1,6 +1,11 @@
 var config = {};
 
-config.domain = '.ilmuadalahkuasa.com';
+// environment
+config.env = "development"; // "testing", "production"
+
+config.domain = 'localhost'
+// config.domain = '.ilmuadalahkuasa.com';
+
 config.secretKey = 'miawmiawmiawmiaw';
 config.port = 3000;
 

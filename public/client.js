@@ -6,10 +6,13 @@ $(function () {
     
     //send message function
     var sendMsg = function(){
-        if( $('#m').val().trim() === '') return '';
-        socket.emit('chat_message', $('#m').val());
-        $('#m').val('');
-        $('#m').height(36);
+        var m = document.getElementById('m');
+        // if( $('#m').val().trim() === '') return '';
+        if (m.innerHTML.trim()=='') return '';
+
+        socket.emit('chat_message', m.innerHTML);
+        m.innerHTML = '';
+        m.height(36);
         autoscrollMessages();
         return false;
     };

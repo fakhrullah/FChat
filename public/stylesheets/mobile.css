@@ -1,0 +1,27 @@
+@media (max-width: 600px) {
+  /* form */
+  .form{
+    background-color: #d0d0d0;
+  }
+  #username, #msg{
+    width:100%;
+    padding: 5px;margin: 10px 0;
+    box-sizing: border-box;
+  }
+  #username, #msg, 
+  #sendMsg, #sendLogin{
+    background-color: #c0c0c0;
+    border: solid 2px #e9e9e9;
+    box-shadow: inset 0px -1px 50px #a0a0a0;
+    font-weight: bold;
+  }
+  #sendMsg, #sendLogin{
+    width:80%;
+  }
+  
+  /* chat */
+  .messages{
+    width:100%;
+    font-size: .8em;
+  }
+}
