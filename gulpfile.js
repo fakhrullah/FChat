@@ -1,12 +1,15 @@
 var gulp = require('gulp'),
 	concat = require('gulp-concat'),
 	autoprefixer = require('gulp-autoprefixer'),
-	minifyCss = require('gulp-minify-css');
+	cleanCss = require('gulp-clean-css');
 
 gulp.task('build-css', function(){
-	return gulp.src(['public/stylesheets/style.css','public/stylesheets/mobile.css'])
-		.pipe(minifyCss())
-		.pipe(autoprefixer())
+	return gulp.src(['public/css/*.css'])
+		.pipe(cleanCss())
+		.pipe(autoprefixer({
+			browsers: ['last 10 versions'],
+			cascade: false
+		}))
 		.pipe(concat('main.css'))
-		.pipe(gulp.dest('public/stylesheets/'))
+		.pipe(gulp.dest('public/css/'))
 })

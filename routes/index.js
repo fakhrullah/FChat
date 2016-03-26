@@ -41,7 +41,12 @@ module.exports = function(io){
 
 				username = user.username;
 				winston.debug('login_success');
+
+				// tell to this user, he/she successfully logged in
 				io.to(socketId).emit('login_success', {username:username});
+
+				// tell to all except user that this user enter chat
+				socket.broadcast.emit('user_enter', {username:username});
 
 			}
 			else{
@@ -56,7 +61,7 @@ module.exports = function(io){
 				winston.debug('user send new message');
 				// TODO purify user message
 				message = cleanHtml(message);
-				io.emit('new_message', {username:username, text:message});
+				io.emit('new_message', {username:username, text:message, userid:socketId});
 			}
 		})
 
@@ -66,27 +71,44 @@ module.exports = function(io){
 			User.find(user, function(err, data){
 				if(err) winston.error("User not found");
 				else {
-
-					winston.debug("Socket id autoset for new connection : " + socket.id);
 					username = user.username;
+					// before change socket id
+					winston.debug("Socket id autoset for new connection : " + socket.id);
+					io.to(socket.id).emit('welcome_back', {username: username});
+					socket.broadcast.emit('user_coming_back', {username: username});
+
+					// change user socket id use socket id that saved in user client data
 					socketId = user.userid;
 					socket.id = user.userid;
 					winston.debug("Change socket id for returned user to old socket id : " + socket.id);
 
 					winston.debug(JSON.stringify(data, null, 2));
-
-					io.emit(socketId).emit('welcome_back');
 				}
 			});
 
+
+		});
+
+		// when user logout
+		socket.on('logout', function(data){
+			winston.debug('user logout');
+			// remove user from database
+			User.remove({userid:data.userid}, function(err){
+				if(err) winston.error("Error remove user from DB.")
+				else {
+					winston.debug("remove user");
+					io.to(socketId).emit('logout_success');
+					socket.broadcast.emit('user_logout', {username:data.username})
+				}
+			});
 		});
 
 		// when user left
 		socket.on('disconnect', function () {
 			if(username){
-				// console.log('user leave');
-				socket.broadcast.emit('user_left', username);
-				// TODO remove user from users
+				winston.debug(username + " is leaving")
+				socket.broadcast.emit('user_left', {username:username});
+				// only remove from users if user logout
 			}
 		});
 

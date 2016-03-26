@@ -4,21 +4,21 @@ block content
   .form
     .login.hide#loginForm
       input#username(placeholder='Insert Your Username')
-      button.btn#sendLogin LOGIN!
+      button.btn.btn-login#sendLogin LOGIN
     .post.hide#postForm
-      textarea#msg
-      button.btn#sendMsg POST!      
+      textarea#msg(rows=1, placeholder='Your Message')
+      button.btn.btn-post#sendMsg &#9654;
 
   .messages#messages
 
-    //- +msg("田中","なんだって良い")(class="black")
-    //- +msg('Anda', 'makan nasi goreng sungguh sedap')(class="blue")
+    //- +msg("Zain", "miawmi awefe we ew")(class="own")
+    //- +msg('Anda', 'makan nasi goreng sungguh sedap')(class="others")
 
   mixin msg(name, msg)
-    .msg
+    .msg&attributes(attributes)
       .user
-        .avatar&attributes(attributes)
+        .hide.avatar&attributes(attributes)
           .initial= name.split("")[0]
         .name=　name
 
-      .text&attributes(attributes)= msg
+      .text= msg

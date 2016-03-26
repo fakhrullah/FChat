@@ -1,0 +1,115 @@
+/*! FChat style */
+
+html{
+	background-color: #F9F9F9;
+	font-family: "Ubuntu", sans-serif;
+	font-size: 16px;
+	line-height: 20	px;
+}
+lang(ja) { 
+	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+body{
+}
+.hide {
+    display: none !important;
+}
+.hidden {
+    height: 0px;
+}
+.btn {
+	font-style: normal;
+	background-color: #333;
+	border-radius: 0px;
+	border: none;
+	color: #fff;
+	padding: 2px 10px;
+	display: inline-block;
+}
+.bigger{
+	font-size: 18px;
+}
+/* form and user input */
+.form{
+	width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+    background-color: #fff;
+}
+.form .login, .form .post{
+	display: flex;
+}
+
+.login input,
+.post textarea {
+	flex-grow: 1;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border: none;
+}
+.post textarea {
+	/* prevent cannot resize */
+}
+
+/* chats */
+.messages {
+	padding: 0 20px;
+}
+.msg{
+	display: flex;
+	flex-wrap: wrap;
+	margin: 4px;
+}
+.msg .text {
+	padding: 10px;
+	background-color: #2DFF78;
+	border-radius: 4px;
+	position: relative;
+}
+.msg .user {
+	font-family: "Consolas", "Courier New", "Ubuntu Mono", monospace;
+	color: #999;
+}
+/* -- others people chat*/
+.msg.others .user{
+	width: 100%;
+}
+.msg.others .text:after {
+    content: "";
+    border-right: 20px solid #2DFF78;
+    border-bottom: 20px transparent solid;
+    position: absolute;
+    left: -16px;
+    top: 0;
+}
+/* -- own chat */
+.msg.own .user{
+	display: none;
+}
+.msg.own .text{
+	margin-left: auto;
+	background-color: #BE80FF;
+}
+.msg.own .text:after {
+	content: "";
+    position: absolute;
+    border-bottom: 20px transparent solid;
+    border-left: 20px solid #BE80FF;
+    right: -16px;
+    top: 0;
+}
+/* msg info */
+.msg.info{
+    display: block;
+    color: #333;
+    font-style: oblique;
+    font-size: 0.9em;
+}
+.msg.info.action {
+	text-align: center;
+	background-color: #2DFF78;
+	padding: 10px;
+	border-radius: 4px;
+}
