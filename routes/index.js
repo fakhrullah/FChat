@@ -54,6 +54,10 @@ module.exports = function(io){
 
 		// when user send message
 		socket.on('chat_message', function (message) {
+			// TODO dont send message to non login user 
+			// - I dont how to do this. io.emit is sending data, it send to all.
+			// - Idea : create a big room '/home' that only can be join by login user.
+			// - Not important
 
 			fchat.sendMessage({
 				username: username,
