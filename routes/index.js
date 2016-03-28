@@ -3,7 +3,7 @@ module.exports = function(io){
 	var express = require('express');
 	var router = express.Router();
 	var winston = require('winston');
-	var sanitizeHtml = require('sanitize-html');
+	// var sanitizeHtml = require('sanitize-html');
 	var fchat = require(__rootpath + 'lib/fchat-connect.js');
 	// var mongoose = require('mongoose');
 	// mongoose.connect('mongodb://localhost/test');
@@ -27,33 +27,40 @@ module.exports = function(io){
 		var username = null;
 
 		// first time when user enter web app
+		// TODO give user first information about website
 		io.to(socketId).emit('new_connection', {userid:socketId});
 
 		// when user login
-		socket.on('login', function(user){
-			var usernameLength = user.username.trim().length;
+		socket.on('login', function(data){
 
-			fchat.login(user, function(err){
+			fchat.login(data, function(err, user){
 				if(err) {
 					io.to(socketId).emit('login_failed', {message: err.message});
 					return;
 				}
+
+				// update user data
+				username = user.username;
+				winston.debug(username);
 
 				// tell to this user, he/she successfully logged in
 				io.to(socketId).emit('login_success', {username:username});
 				// tell to all except user that this user enter chat
 				socket.broadcast.emit('user_enter', {username:username});
 			});
+
 		})
 
 		// when user send message
 		socket.on('chat_message', function (message) {
-			if(username){
-				winston.debug('user send new message');
-				// TODO purify user message
-				message = cleanHtml(message);
-				io.emit('new_message', {username:username, text:message, userid:socketId});
-			}
+			fchat.sendMessage({
+				username: username,
+				userid: socketId,
+				message: message
+			},function(err, data){
+				if(err){return;}
+				io.emit('new_message', {username:data.username, text:data.message, userid:data.userid});
+			});
 		})
 
 		// when user already login before and just coming back
@@ -101,14 +108,7 @@ module.exports = function(io){
 				socket.broadcast.emit('user_left', {username:username});
 				// only remove from users if user logout
 			}
-		});
-
-		function cleanHtml(userInput){
-			return sanitizeHtml(userInput, {
-				allowedTags: [],
-				allowedAttribute: []
-			});
-		} 
+		})
 
 
 	})
