@@ -45,7 +45,7 @@ module.exports = function(io){
 				winston.debug("username => " + username);
 
 				// tell to this user, he/she successfully logged in
-				io.to(socketId).emit('login_success', {username:username});
+				io.to(socketId).emit('login_success', {username:username, returneduserkey:user.returneduserkey});
 				// tell to all except user that this user enter chat
 				socket.broadcast.emit('user_enter', {username:username});
 			});

@@ -148,13 +148,14 @@ socket.on('new_connection', function (user) {
 	// check localstorage for username and userid
 	var username = localStorage.getItem('username');
 	var userid = localStorage.getItem('userid');
+	var returneduserkey = localStorage.getItem('returneduserkey');
 
 	// for returned user, send available user data
 	// REMEMBER data from localStorage is always in string
 	if( username && username != 'null'){
 		// this is not the first time for user
 		// localStorage.setItem('userid', user.userid);
-		socket.emit('returned_user', {userid:userid, username: username});
+		socket.emit('returned_user', {userid:userid, username: username, returneduserkey:returneduserkey});
 		// console.log('miaw');
 	}
 	else{
@@ -169,6 +170,7 @@ socket.on('new_connection', function (user) {
 
 socket.on('login_success', function (user){
 	localStorage.setItem('username', user.username);
+	localStorage.setItem('returneduserkey', user.returneduserkey);
 	var data = user;
 	data.info = 'welcome';
 	addNewMsg(buildInfoDiv(data))
@@ -179,7 +181,6 @@ socket.on('login_failed', function(data){
 	addNewMsg(buildInfoDiv(data));
 });
 socket.on('welcome_back', function(user){
-	console.log(user);
 	var data = user;
 	data.info = 'welcome_back';
 	addNewMsg(buildInfoDiv(data));
