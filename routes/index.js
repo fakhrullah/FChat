@@ -54,17 +54,22 @@ module.exports = function(io){
 
 		// when user send message
 		socket.on('chat_message', function (message) {
+
 			fchat.sendMessage({
 				username: username,
 				userid: socketId,
 				message: message
 			},function(err, data){
 				if(err){
+					// tell user their message failed to sent to other
 					io.to(socketId).emit('send_message_failed', {message: err.message});
 					return;
 				}
+
+				// send message to all
 				io.emit('new_message', {username:data.username, text:data.message, userid:data.userid});
 			});
+
 		})
 
 		// when user already login before and just coming back
@@ -85,8 +90,8 @@ module.exports = function(io){
 
 				// change user socket id use socket id that saved in user client data
 				socketId = socket.id = user.userid;
-				// socket.id = user.userid;
 				winston.debug("Change socket id for returned user to old socket id : " + socket.id);
+
 			});
 
 		});
@@ -94,14 +99,16 @@ module.exports = function(io){
 		// when user logout
 		socket.on('logout', function(data){
 			winston.debug('user logout');
-			// remove user from database
-			User.remove({userid:data.userid}, function(err){
-				if(err) winston.error("Error remove user from DB.")
-				else {
-					winston.debug("remove user");
-					io.to(socketId).emit('logout_success');
-					socket.broadcast.emit('user_logout', {username:data.username})
+			fchat.logout(data, function(err){
+
+				if(err){
+					io.to(socketId).emit('logout_failed', {message: err.message});
+					return;
 				}
+
+				io.to(socketId).emit('logout_success');
+				socket.broadcast.emit('user_logout', {username:data.username})
+
 			});
 		});
 
