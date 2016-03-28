@@ -32,6 +32,7 @@ module.exports = function(io){
 
 		// when user login
 		socket.on('login', function(data){
+			winston.debug('user is logging in');
 
 			fchat.login(data, function(err, user){
 				if(err) {
@@ -41,7 +42,7 @@ module.exports = function(io){
 
 				// update user data
 				username = user.username;
-				winston.debug(username);
+				winston.debug("username => " + username);
 
 				// tell to this user, he/she successfully logged in
 				io.to(socketId).emit('login_success', {username:username});
@@ -58,7 +59,10 @@ module.exports = function(io){
 				userid: socketId,
 				message: message
 			},function(err, data){
-				if(err){return;}
+				if(err){
+					io.to(socketId).emit('send_message_failed', {message: err.message});
+					return;
+				}
 				io.emit('new_message', {username:data.username, text:data.message, userid:data.userid});
 			});
 		})

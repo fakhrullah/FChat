@@ -198,6 +198,10 @@ socket.on('logout_success', function(user){
 socket.on('new_message', function (data) {
 	addNewMsg(buildChatDiv(data));
 });
+socket.on('send_message_failed', function(data){
+	data.info = 'error';
+	addNewMsg(buildInfoDiv(data));
+})
 
 // //user left
 socket.on('user_left', function (data) {
