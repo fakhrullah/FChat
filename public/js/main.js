@@ -66,6 +66,10 @@ function buildInfoDiv(data){
 			text = data.username + " logged out";
 			infoDiv.innerHTML = text;
 			break;
+		case 'error':
+			text = data.message;
+			infoDiv.innerHTML = text;
+			break;
 		default:
 			text = data.info + " not implemented yet."
 			infoDiv.innerHTML = text;
@@ -170,8 +174,9 @@ socket.on('login_success', function (user){
 	addNewMsg(buildInfoDiv(data))
 	showPostForm();
 });
-socket.on('login_failed', function(){
-	showErrorLogin();
+socket.on('login_failed', function(data){
+	data.info = 'error';
+	addNewMsg(buildInfoDiv(data));
 });
 socket.on('welcome_back', function(user){
 	var data = user;

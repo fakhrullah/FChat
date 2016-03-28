@@ -4,10 +4,11 @@ module.exports = function(io){
 	var router = express.Router();
 	var winston = require('winston');
 	var sanitizeHtml = require('sanitize-html');
-	var mongoose = require('mongoose');
-	mongoose.connect('mongodb://localhost/test');
+	var fchat = require(__rootpath + 'lib/fchat-connect.js');
+	// var mongoose = require('mongoose');
+	// mongoose.connect('mongodb://localhost/test');
 
-	var User = mongoose.model('User', {userid:String, username:String});
+	// var User = mongoose.model('User', {userid:String, username:String, isLogin:Boolean});
 
 	winston.level = 'debug';
 
@@ -19,10 +20,9 @@ module.exports = function(io){
 	});
 
 	io.on('connection', function(socket){
-		console.log("connection start");
+		winston.debug("connection start");
 
 		// when user enter website 
-		n++;
 		var socketId = socket.id;
 		var username = null;
 
@@ -31,28 +31,19 @@ module.exports = function(io){
 
 		// when user login
 		socket.on('login', function(user){
-			if(user.username.trim().length > 3){
-				// add user to db
-				var u = new User(user);
-				u.save(function(err, user){
-					if(err) winston.debug("Failed to save user");
-					else winston.debug(JSON.stringify(user, null, 2));
-				});
+			var usernameLength = user.username.trim().length;
 
-				username = user.username;
-				winston.debug('login_success');
+			fchat.login(user, function(err){
+				if(err) {
+					io.to(socketId).emit('login_failed', {message: err.message});
+					return;
+				}
 
 				// tell to this user, he/she successfully logged in
 				io.to(socketId).emit('login_success', {username:username});
-
 				// tell to all except user that this user enter chat
 				socket.broadcast.emit('user_enter', {username:username});
-
-			}
-			else{
-				winston.debug('login_failed');
-				io.to(socketId).emit('login_failed');
-			}
+			});
 		})
 
 		// when user send message
