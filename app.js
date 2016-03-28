@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var socketIO = require('socket.io');
+global.__rootpath = __dirname+"/";
 
 var app = express();
 var io = socketIO();
