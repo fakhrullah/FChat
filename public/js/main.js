@@ -58,6 +58,11 @@ function buildInfoDiv(data){
 			text = "Welcome to FChat. By login means you agree with our <a href=\"/terms\" target=\"_blank\">terms</a>."
 			infoDiv.innerHTML = text;
 			break;
+		case 'first_time_user':
+			infoDiv.className += " action";
+			text = "First time in FChat? Look below &darr; , insert your name then click login button.";
+			infoDiv.innerHTML = text;
+			break;
 		case 'user_enter':
 			text = data.username + " enter chat.";
 			infoDiv.innerHTML = text;
@@ -156,15 +161,15 @@ socket.on('new_connection', function (user) {
 		// this is not the first time for user
 		// localStorage.setItem('userid', user.userid);
 		socket.emit('returned_user', {userid:userid, username: username, returneduserkey:returneduserkey});
-		// console.log('miaw');
 	}
 	else{
-		// save username and userid to localstorage
-		// localStorage.setItem('username', user.username);
+		// save userid to localstorage
 		localStorage.setItem('userid', user.userid);
-		// ask user to login
+		// ask user to login 
 		showLoginForm();
-		// console.log('meh');
+		// welcome first time user 
+		// and teach how to login
+		addNewMsg( buildInfoDiv({info:'first_time_user'}) );
 	}
 });
 
