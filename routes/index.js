@@ -68,26 +68,26 @@ module.exports = function(io){
 		})
 
 		// when user already login before and just coming back
-		socket.on('returned_user', function(user){
+		socket.on('returned_user', function(data){
 
-			User.find(user, function(err, data){
-				if(err) winston.error("User not found");
-				else {
-					username = user.username;
-					// before change socket id
-					winston.debug("Socket id autoset for new connection : " + socket.id);
-					io.to(socket.id).emit('welcome_back', {username: username});
-					socket.broadcast.emit('user_coming_back', {username: username});
-
-					// change user socket id use socket id that saved in user client data
-					socketId = user.userid;
-					socket.id = user.userid;
-					winston.debug("Change socket id for returned user to old socket id : " + socket.id);
-
-					winston.debug(JSON.stringify(data, null, 2));
+			fchat.returned_user(data, function(err, user){
+				if(err){
+					io.to(socketId).emit('login_failed', {message: err.message});
+					return;
 				}
-			});
 
+				username = user.username;
+				winston.debug(username);
+				// before change socket id
+				winston.debug("Socket id autoset for new connection : " + socket.id);
+				io.to(socket.id).emit('welcome_back', {username: user.username});
+				socket.broadcast.emit('user_coming_back', {username: user.username});
+
+				// change user socket id use socket id that saved in user client data
+				socketId = socket.id = user.userid;
+				// socket.id = user.userid;
+				winston.debug("Change socket id for returned user to old socket id : " + socket.id);
+			});
 
 		});
 

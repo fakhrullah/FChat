@@ -179,6 +179,7 @@ socket.on('login_failed', function(data){
 	addNewMsg(buildInfoDiv(data));
 });
 socket.on('welcome_back', function(user){
+	console.log(user);
 	var data = user;
 	data.info = 'welcome_back';
 	addNewMsg(buildInfoDiv(data));
@@ -190,9 +191,6 @@ socket.on('user_enter', function(user){
 	addNewMsg(buildInfoDiv(data));
 });
 
-socket.on('logout_success', function(user){
-	showLoginForm();
-});
 
 // receive chat message
 socket.on('new_message', function (data) {
@@ -211,6 +209,9 @@ socket.on('user_left', function (data) {
 socket.on('user_logout', function (data) {
 	data.info = 'logout';
 	addNewMsg(buildInfoDiv(data))
+});
+socket.on('logout_success', function(user){
+	showLoginForm();
 });
 
 socket.on('user_coming_back', function(data){
