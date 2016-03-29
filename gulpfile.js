@@ -4,7 +4,7 @@ var gulp = require('gulp'),
 	cleanCss = require('gulp-clean-css');
 
 gulp.task('build-css', function(){
-	return gulp.src(['public/css/*.css'])
+	return gulp.src(['public/css/*.css',!'public/css/main.css'])
 		.pipe(cleanCss())
 		.pipe(autoprefixer({
 			browsers: ['last 10 versions'],

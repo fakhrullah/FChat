@@ -81,7 +81,7 @@ module.exports = function(io){
 
 			fchat.returned_user(data, function(err, user){
 				if(err){
-					io.to(socketId).emit('login_failed', {message: err.message});
+					io.to(socketId).emit('unvalid_returneduserkey', {message: err.message});
 					return;
 				}
 
@@ -103,6 +103,7 @@ module.exports = function(io){
 		// when user logout
 		socket.on('logout', function(data){
 			winston.debug('user logout');
+			// TODO [bug] when user logout user still can send message
 			fchat.logout(data, function(err){
 
 				if(err){

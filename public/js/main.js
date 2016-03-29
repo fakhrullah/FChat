@@ -75,6 +75,16 @@ function buildInfoDiv(data){
 			text = data.message;
 			infoDiv.innerHTML = text;
 			break;
+		case 'error_key_outdated':
+			infoDiv.className += " action";
+			var logoutBtn = document.createElement('button');
+			logoutBtn.innerHTML = "LOGOUT";
+			logoutBtn.className = "btn btn-logout";
+			logoutBtn.onclick = function(){logout()};
+			text = data.message;
+			infoDiv.innerHTML = text + "<br/>";
+			infoDiv.appendChild(logoutBtn);
+			break;
 		default:
 			text = data.info + " not implemented yet."
 			infoDiv.innerHTML = text;
@@ -197,6 +207,10 @@ socket.on('user_enter', function(user){
 	addNewMsg(buildInfoDiv(data));
 });
 
+socket.on('unvalid_returneduserkey', function(data){
+	data.info = 'error_key_outdated';
+	addNewMsg(buildInfoDiv(data));
+})
 
 // receive chat message
 socket.on('new_message', function (data) {
@@ -218,6 +232,10 @@ socket.on('user_logout', function (data) {
 });
 socket.on('logout_success', function(user){
 	showLoginForm();
+});
+socket.on('logout_failed', function(data){
+	data.info = 'error';
+	addNewMsg(buildInfoDiv(data));
 });
 
 socket.on('user_coming_back', function(data){
